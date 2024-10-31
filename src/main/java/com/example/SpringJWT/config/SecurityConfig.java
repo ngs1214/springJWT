@@ -1,5 +1,6 @@
 package com.example.SpringJWT.config;
 
+import com.example.SpringJWT.jwt.JWTFilter;
 import com.example.SpringJWT.jwt.JWTUtil;
 import com.example.SpringJWT.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 );
 
+        httpSecurity
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         httpSecurity
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
