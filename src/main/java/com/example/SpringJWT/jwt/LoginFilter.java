@@ -34,11 +34,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //성공시에
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
-
+        System.out.println("성공");
     }
     //실패시에
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-
+        System.out.println("실패");
     }
 }
