@@ -1,6 +1,7 @@
 package com.example.SpringJWT.jwt;
 
 import com.example.SpringJWT.repository.RefreshRepository;
+import com.example.SpringJWT.service.RefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +19,8 @@ import java.io.IOException;
 public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+//    private final RefreshRepository refreshRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -77,7 +79,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //DB에 저장되어 있는지 확인
-        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+        Boolean isExist = refreshTokenService.getRefreshToken(jwtUtil.getUsername(refresh));
+//        Boolean isExist = refreshRepository.existsByRefresh(refresh);
         if (!isExist) {
 
             //response status code
@@ -87,7 +90,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거
-        refreshRepository.deleteByRefresh(refresh);
+//        refreshRepository.deleteByRefresh(refresh);
+        refreshTokenService.deleteRefreshToken(jwtUtil.getUsername(refresh));
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);

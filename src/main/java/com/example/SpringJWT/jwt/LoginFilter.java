@@ -3,6 +3,7 @@ package com.example.SpringJWT.jwt;
 import com.example.SpringJWT.dto.CustomUserDetails;
 import com.example.SpringJWT.entity.RefreshEntity;
 import com.example.SpringJWT.repository.RefreshRepository;
+import com.example.SpringJWT.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +28,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+//    private final RefreshRepository refreshRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
 //    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
@@ -87,13 +89,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {
 
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
+//        Date date = new Date(System.currentTimeMillis() + expiredMs);
+        refreshTokenService.saveRefreshToken(username,refresh,expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setUsername(username);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
+//        RefreshEntity refreshEntity = new RefreshEntity();
+//        refreshEntity.setUsername(username);
+//        refreshEntity.setRefresh(refresh);
+//        refreshEntity.setExpiration(date.toString());
 
-        refreshRepository.save(refreshEntity);
+//        refreshRepository.save(refreshEntity);
     }
 }

@@ -3,6 +3,7 @@ package com.example.SpringJWT.controller;
 import com.example.SpringJWT.entity.RefreshEntity;
 import com.example.SpringJWT.jwt.JWTUtil;
 import com.example.SpringJWT.repository.RefreshRepository;
+import com.example.SpringJWT.service.RefreshTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.Date;
 public class ReissueController {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
@@ -57,8 +59,10 @@ public class ReissueController {
         String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
-        refreshRepository.deleteByRefresh(refresh);
-        addRefreshEntity(username, newRefresh, 86400000L);
+        refreshTokenService.deleteRefreshToken(username);
+        refreshTokenService.saveRefreshToken(username,newRefresh,86400000L);
+//        refreshRepository.deleteByRefresh(refresh);
+//        addRefreshEntity(username, newRefresh, 86400000L);
 
         //response
         response.setHeader("access", newAccess);

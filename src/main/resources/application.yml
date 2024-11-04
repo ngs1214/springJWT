@@ -11,7 +11,9 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
   jwt:
     secret: 1asdfasdf354sdfsgjsdfgjk5sdfgjksdfgasdf
-
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
