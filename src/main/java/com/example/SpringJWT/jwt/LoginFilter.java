@@ -1,9 +1,11 @@
 package com.example.SpringJWT.jwt;
 
 import com.example.SpringJWT.dto.CustomUserDetails;
+import com.example.SpringJWT.dto.LoginDTO;
 import com.example.SpringJWT.entity.RefreshEntity;
 import com.example.SpringJWT.repository.RefreshRepository;
 import com.example.SpringJWT.service.RefreshTokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -34,14 +36,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
 //    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            LoginDTO loginDTO = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
+            System.out.println("loginDTO = " + loginDTO);
 
-        System.out.println("username = " + username);
-        System.out.println("password = " + password);
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
-        //매니저가 검증 진행
-        return authenticationManager.authenticate(authToken);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginDTO.getUserId(), loginDTO.getPassword(), null);
+            //매니저가 검증 진행
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+//        String username = obtainUsername(request);
+//        String password = obtainPassword(request);
+//
+//        System.out.println("username = " + username);
+//        System.out.println("password = " + password);
+//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+//        //매니저가 검증 진행
+//        return authenticationManager.authenticate(authToken);
 
     }
     //성공시에

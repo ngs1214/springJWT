@@ -79,7 +79,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //DB에 저장되어 있는지 확인
-        Boolean isExist = refreshTokenService.getRefreshToken(jwtUtil.getUsername(refresh));
+//        Boolean isExist = refreshTokenService.getRefreshToken(jwtUtil.getUsername(refresh));
+        Boolean isExist = refreshTokenService.getRefreshToken(jwtUtil.getUserId(refresh));
 //        Boolean isExist = refreshRepository.existsByRefresh(refresh);
         if (!isExist) {
 
@@ -91,7 +92,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //로그아웃 진행
         //Refresh 토큰 DB에서 제거
 //        refreshRepository.deleteByRefresh(refresh);
-        refreshTokenService.deleteRefreshToken(jwtUtil.getUsername(refresh));
+//        refreshTokenService.deleteRefreshToken(jwtUtil.getUsername(refresh));
+        refreshTokenService.deleteRefreshToken(jwtUtil.getUserId(refresh));
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);

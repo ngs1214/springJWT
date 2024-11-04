@@ -4,7 +4,11 @@ import com.example.SpringJWT.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    boolean existsByUsername(String username);
+//    boolean existsByUsername(String username);
+//
+//    UserEntity findByUsername(String username);
 
-    UserEntity findByUsername(String username);
+    boolean existsByUserId(String userId);
+
+    UserEntity findByUserId(String userId);
 }
