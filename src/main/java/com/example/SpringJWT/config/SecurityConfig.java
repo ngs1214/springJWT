@@ -3,6 +3,7 @@ package com.example.SpringJWT.config;
 import com.example.SpringJWT.jwt.JWTFilter;
 import com.example.SpringJWT.jwt.JWTUtil;
 import com.example.SpringJWT.jwt.LoginFilter;
+import com.example.SpringJWT.repository.RefreshRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -81,7 +83,7 @@ public class SecurityConfig {
         httpSecurity
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         httpSecurity
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil,refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
         //세션설정 STATELESS로 설정 중요!
         httpSecurity
